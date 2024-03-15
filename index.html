@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Select Dropdown</title>
+    <style>
+        select {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: not-allowed;
+            background-color: #f9f9f9;
+            outline: none;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="myForm" action="/submit" method="post" onsubmit="prepareData()">
+        <input type="text" id="selectedOptions" readonly>
+        <br>
+        <select id="mySelect" multiple onclick="toggleSelection(event)">
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+            <option value="option4">Option 4</option>
+            <option value="option5">Option 5</option>
+        </select>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const selectedOptions = {};
+
+        function toggleSelection(event) {
+            const option = event.target;
+            const value = option.value;
+
+            if (selectedOptions[value]) {
+                delete selectedOptions[value];
+            } else {
+                selectedOptions[value] = true;
+            }
+
+            updateInput();
+        }
+
+        function updateInput() {
+            const inputElement = document.getElementById("selectedOptions");
+            const selectedValues = Object.keys(selectedOptions);
+            inputElement.value = selectedValues.join(", ");
+        }
+
+        function prepareData() {
+            const selectElement = document.getElementById("mySelect");
+            const formData = new FormData();
+
+            for (const option of selectElement.selectedOptions) {
+                formData.append('selectedOptions', option.value);
+            }
+
+            // 傳到 /submit
+        }
+    </script>
+</body>
+
+</html>
